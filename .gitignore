@@ -1,3 +1,17 @@
+challenge/llama_adapter_v2_multimodal7b/data
+challenge/llama_adapter_v2_multimodal7b/weights
+challenge/llama_adapter_v2_multimodal7b/check_points
+challenge/data
+challenge/llama_adapter_v2_multimodal7b/finetune_output
+challenge/llama_adapter_v2_multimodal7b/output
+challenge/output.json
+challenge/test.json
+
+# big files
+challenge/test_eval.json
+challenge/test_llama.json
+challenge/train_sample.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
