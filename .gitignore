@@ -4,10 +4,11 @@ challenge/llama_adapter_v2_multimodal7b/check_points
 challenge/data
 challenge/llama_adapter_v2_multimodal7b/finetune_output
 challenge/llama_adapter_v2_multimodal7b/output
-challenge/output.json
-challenge/test.json
+challenge/pi_test
 
 # big files
+challenge/output.json
+challenge/test.json
 challenge/test_eval.json
 challenge/test_llama.json
 challenge/train_sample.json
