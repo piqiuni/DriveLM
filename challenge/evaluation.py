@@ -87,7 +87,11 @@ class evaluation_suit():
         answer_nums = re.findall(r'\d+\.\d+', answer)
         GT_nums = re.findall(r'\d+\.\d+', GT)
         # transform string into float
+        # print([list(map(float, x.split()))[0] for x in answer_nums])
+        # print([list(map(float, x.split()))[0] for x in GT_nums])
+        # raise
         answer_nums = np.array([list(map(float, x.split()))[0] for x in answer_nums]).reshape(-1, 2)
+        # print(answer_nums)
         GT_nums = np.array([list(map(float, x.split()))[0] for x in GT_nums]).reshape(-1, 2)
 
         matched_out = []

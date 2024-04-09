@@ -10,7 +10,7 @@ country = "China"  # <str> -- country or region
 
 
 def main():
-    with open('output.json', 'r') as file:
+    with open('output_val.json', 'r') as file:
         output_res = json.load(file)
 
     submission_content = {

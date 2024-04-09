@@ -8,10 +8,14 @@ challenge/pi_test
 
 # big files
 challenge/output.json
+challenge/output_val.json
 challenge/test.json
 challenge/test_eval.json
 challenge/test_llama.json
 challenge/train_sample.json
+challenge/v1_1_val_nus_q_only.json
+challenge/test_val_llama.json
+challenge/submission.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
