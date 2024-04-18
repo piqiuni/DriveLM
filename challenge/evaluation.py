@@ -84,11 +84,18 @@ class evaluation_suit():
         answer: [[1.,2.], [2., 3.]]
         GT: [[1., 2.], [2., 3.]]
         """
+        # print('anwser= \"', answer, "\"")
+        # print('GT=', GT, "\"")
+        # print("---")
+        # answer= "There is a black sedan to the back of the ego vehicle, a black sedan to the front of the ego vehicle, a black sedan to the front of the ego vehicle, a black sedan to the front of the ego vehicle, and a black sedan to the front of the ego vehicle. The IDs of these objects are <c1,CAM_BACK,888.0,512.0>, <c2,CAM_FRONT,1024.0,512.0>, <c3,CAM_FRONT,1024.0,512.0>, <c4,CAM_FRONT,1024.0,512.0>, and <c5,CAM_FRONT,1024.0,512.0>."
+        # GT= [888.0, 512.0, 1024.0, 512.0, 1024.0, 512.0, 1024.0, 512.0, 1024.0, 512.0]
         answer_nums = re.findall(r'\d+\.\d+', answer)
         GT_nums = re.findall(r'\d+\.\d+', GT)
         # transform string into float
-        # print([list(map(float, x.split()))[0] for x in answer_nums])
+        print([list(map(float, x.split()))[0] for x in answer_nums])
         # print([list(map(float, x.split()))[0] for x in GT_nums])
+        # print(GT)
+        # print(GT_nums)
         # raise
         answer_nums = np.array([list(map(float, x.split()))[0] for x in answer_nums]).reshape(-1, 2)
         # print(answer_nums)

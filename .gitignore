@@ -4,7 +4,7 @@ challenge/llama_adapter_v2_multimodal7b/check_points
 challenge/data
 challenge/llama_adapter_v2_multimodal7b/finetune_output
 challenge/llama_adapter_v2_multimodal7b/output
-challenge/pi_test
+challenge/pi_test/outputImages
 
 # big files
 challenge/output.json

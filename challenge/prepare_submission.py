@@ -24,7 +24,7 @@ def main():
     }
 
     with open('submission.json', 'w') as file:
-        json.dump(submission_content, file, indent=4)
+        json.dump(submission_content, file, indent=4)   
 
 if __name__ == "__main__":
     main()
