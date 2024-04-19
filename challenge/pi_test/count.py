@@ -4,6 +4,8 @@
 # Example: 10
 
 import json
+def hello():
+    print("Hello, World!")
 
 with open("output.json", "r") as f:
     data = json.load(f)

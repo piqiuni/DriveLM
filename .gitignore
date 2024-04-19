@@ -5,6 +5,8 @@ challenge/data
 challenge/llama_adapter_v2_multimodal7b/finetune_output
 challenge/llama_adapter_v2_multimodal7b/output
 challenge/pi_test/outputImages
+challenge/pi_test/temp
+challenge/pi_test/pi_output.json
 
 # big files
 challenge/output.json
@@ -16,6 +18,10 @@ challenge/train_sample.json
 challenge/v1_1_val_nus_q_only.json
 challenge/test_val_llama.json
 challenge/submission.json
+
+challenge/mini_output.json
+challenge/refine*
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

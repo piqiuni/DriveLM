@@ -104,6 +104,8 @@ class ReadOutput(object):
         for image_path in image_paths:
             abs_image_path = os.path.join(self.abs_data_path, image_path)
             image = cv2.imread(abs_image_path)
+            cv2.imwrite(os.path.join('./pi_test', 'test.png'), image)
+            raise
             image_camera = image_path.split('/')[3]
             (text_width, text_height), baseline = cv2.getTextSize(image_camera, self.font, self.font_scale, self.font_thickness)
             img_height, img_width = image.shape[:2]

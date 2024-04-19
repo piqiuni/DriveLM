@@ -55,7 +55,9 @@ def tt():
 
     # 提取answer中的坐标数据
     answer_coords = re.findall(r'<.*?>', answer)
-    print(answer_coords[-1])
+    answer2_coords = re.findall(r'<.', answer)
+    print(answer_coords)
+    print(answer2_coords)
     # 修复不完整的坐标
     last_coord = answer_coords[-1]
     last_coord_pos = answer.find(last_coord)
@@ -80,15 +82,19 @@ def debug_match(answer):
 
 
 def main():
-    root_path1 = "output_val.json"
+    # root_path1 = "output_val.json"
+    # new_root_path1 = "refine_output_val.json"
+    # root_path2 = "v1_1_val_nus_q_only.json"
+    
+    root_path1 = "mini_output.json"
+    new_root_path1 = "refine_mini_output.json"
+    root_path2 = "mini_test_eval.json"
+    
     with open(root_path1, 'r') as f :#, \    
         pred_file = json.load(f)
         
-    old_pred_file = pred_file
     pred_file = {pred_file[i]["id"]: pred_file[i] for i in range(len(pred_file))}
-    print(pred_file == old_pred_file)
     
-    root_path2 = "v1_1_val_nus_q_only.json"
     with open(root_path2, 'r') as f:
         test_file = json.load(f)
 
@@ -106,14 +112,26 @@ def main():
                 tag = qa['tag']
                 idx = scene_id + "_" + frame_id + "_" + str(i)
                 predict = pred_file[idx]["answer"]
-                # assert pred_file[idx]["gt_answer"] == GT, print(pred_file[idx]["gt_answer"], GT)
                 if first_flag:
                     first_flag = False
-                    evaluation.set_graph(predict, GT)
+                    answer_coords = re.findall(r'<.*?>', predict)
+                    answer2_coords = re.findall(r'<.', predict)
+                    if(len(answer_coords) != len(answer2_coords)):
+                        # print(len(answer_coords) , len(answer2_coords))
+                        last_coord = answer_coords[-1]
+                        last_coord_pos = predict.find(last_coord)
+                        new_predict = predict[:last_coord_pos + len(last_coord)]
+                        pred_file[idx]["answer"] = new_predict
+                        # print(predict)
+                        # print(new_predict)
                     break
                 
-            raise
+
+    
+    new_pred_file = [pred_file[key] for key in pred_file.keys()]
+    with open(new_root_path1, 'w') as f :
+        json.dump(new_pred_file, f, indent=4)
 
 if __name__ == '__main__':
-    # main()
-    tt()
+    main()
+    # tt()

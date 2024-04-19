@@ -97,9 +97,23 @@ parser.add_argument('--num_processes', type=int, default=8, help='number of gpus
 args = parser.parse_args()
 
 
+def debug():
+    transform_train = transforms.Compose([
+        transforms.Resize((224, 224), interpolation=BICUBIC),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])])
+    pic = cv2.imread("../pi_test/test.png")
+    
+    image = Image.fromarray(pic)
+    image = transform_train(image)
+    pil_image = transforms.ToPILImage()(image)
+    # Save the image
+    pil_image.save("../pi_test/image.jpg")
 
 # python pi_demo.py --llama_dir ./weights/ --checkpoint ./check_points/0325-checkpoint-3.pth --batch_size 1 --num_processes 2
-if __name__ == '__main__':
+# python pi_demo.py --llama_dir ./weights/ --checkpoint ./check_points/1bcbffc43484332672092e0024a8699a6eb5f558161aebf98a7c6b1db67224d1_LORA-BIAS-7B.pth --batch_size 1 --num_processes 2
+
+def main():
     num_gpus = args.num_processes
     print(f"Using {num_gpus} GPUs")
     
@@ -115,3 +129,9 @@ if __name__ == '__main__':
 
     with open(args.output, "w") as f:
         json.dump(data_dict, f, indent=4)
+
+
+
+if __name__ == '__main__':
+    debug()
+    # main()

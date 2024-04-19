@@ -92,7 +92,7 @@ class evaluation_suit():
         answer_nums = re.findall(r'\d+\.\d+', answer)
         GT_nums = re.findall(r'\d+\.\d+', GT)
         # transform string into float
-        print([list(map(float, x.split()))[0] for x in answer_nums])
+        # print([list(map(float, x.split()))[0] for x in answer_nums])
         # print([list(map(float, x.split()))[0] for x in GT_nums])
         # print(GT)
         # print(GT_nums)
