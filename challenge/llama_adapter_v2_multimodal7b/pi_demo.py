@@ -110,9 +110,38 @@ def debug():
     # Save the image
     pil_image.save("../pi_test/image.jpg")
 
+def test():
+    llama_dir = args.llama_dir
+
+
+    transform_train = transforms.Compose([
+        transforms.Resize((224, 224), interpolation=BICUBIC),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])])
+
+    with open(args.data, 'r') as f:
+        data_all = json.load(f)
+
+    data_to_process = data_all
+
+    dataset = LLamaDataset(data_to_process, transform=transform_train)
+    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=8)
+
+    for batch in (dataloader):
+        print(len(batch))
+        print(len(batch[0]))
+        raise
+        images, prompts, ids, questions, gt_answers = batch
+        images = images.to(device)
+        results = model.generate(images, prompts, temperature=0.2, top_p=0.1)
+        
+        for i, result in enumerate(results):
+            print(f"Thread {rank}: Result - {result}")
+            data_dict.append({'id': ids[i], 'question': questions[i], 'answer': result})
+    
+
 # python pi_demo.py --llama_dir ./weights/ --checkpoint ./check_points/0325-checkpoint-3.pth --batch_size 1 --num_processes 2
 # python pi_demo.py --llama_dir ./weights/ --checkpoint ./check_points/1bcbffc43484332672092e0024a8699a6eb5f558161aebf98a7c6b1db67224d1_LORA-BIAS-7B.pth --batch_size 1 --num_processes 2
-
 def main():
     num_gpus = args.num_processes
     print(f"Using {num_gpus} GPUs")
@@ -133,5 +162,6 @@ def main():
 
 
 if __name__ == '__main__':
-    debug()
+    # debug()
+    test()
     # main()

@@ -7,8 +7,8 @@ frame_numbers = 2
 # filepath = '../test_llama.json'
 # mini_filepath = '../mini_test_llama.json'
 
-filepath = './test_eval.json'
-mini_filepath = './mini_test_eval.json'
+# filepath = './test_eval.json'
+# mini_filepath = './mini_test_eval.json'
 
 
 with open(filepath, 'r') as f:
