@@ -1,7 +1,7 @@
 import json
 
 # Please fill in your team information here
-method = "LLaMA-BaseLine"  # <str> -- name of the method
+method = "Model1"  # <str> -- name of the method
 team = "BIT-ININ"  # <str> -- name of the team, !!!identical to the Google Form!!!
 authors = ["Delun Li, Yang Chen, Wenchao Huang, Herui Li, Zihao Mao, Mingyu Hou, Rui Zhang, Chongshang Yan"]  # <list> -- list of str, authors
 email = "piqiuni@qq.com"  # <str> -- e-mail address
@@ -10,7 +10,7 @@ country = "China"  # <str> -- country or region
 
 
 def main():
-    with open('refine_output_val.json', 'r') as file:
+    with open('./pi_test/submit/refine_output_0430_1033.json', 'r') as file:
         output_res = json.load(file)
 
     submission_content = {

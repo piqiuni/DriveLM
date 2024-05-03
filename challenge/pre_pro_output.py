@@ -1,7 +1,9 @@
 
+import argparse
 import json
 import numpy as np
 import re
+import os
 
 from evaluation import evaluation_suit
 
@@ -82,13 +84,22 @@ def debug_match(answer):
 
 
 def main():
-    # root_path1 = "output_val.json"
-    # new_root_path1 = "refine_output_val.json"
-    # root_path2 = "v1_1_val_nus_q_only.json"
+    root_path1 = "./pi_test/submit/output_0430_1033.json"
+    new_name = "refine_" + root_path1.split("/")[-1]
+    print(root_path1.split("/")[:-1])
+    new_root_path1 = os.path.join(*root_path1.split("/")[:-1], new_name)
     
-    root_path1 = "mini_output.json"
-    new_root_path1 = "refine_mini_output.json"
-    root_path2 = "mini_test_eval.json"
+    root_path2 = "v1_1_val_nus_q_only.json"
+    
+    
+    # root_path1 = "mini_output.json"
+    # new_root_path1 = "refine_mini_output.json"
+    # root_path2 = "mini_test_eval.json"
+    
+    # parser = argparse.ArgumentParser(description='Evaluation')
+    # parser.add_argument('--root_path1', type=str, default=".", help='path to prediction file')
+    # parser.add_argument('--root_path2', type=str, default=".", help='path to test file')
+    # args = parser.parse_args()
     
     with open(root_path1, 'r') as f :#, \    
         pred_file = json.load(f)
@@ -99,6 +110,9 @@ def main():
         test_file = json.load(f)
 
     evaluation = evaluation_suit()
+    error_format_count = 0
+    bad_answer_count = 0
+    no_answer_count = 0
     for scene_id in test_file.keys():
         scene_data = test_file[scene_id]['key_frames']
 
@@ -112,11 +126,25 @@ def main():
                 tag = qa['tag']
                 idx = scene_id + "_" + frame_id + "_" + str(i)
                 predict = pred_file[idx]["answer"]
+                # print(question)
+                if question == "What's your comment on this scene?":
+                    # print(f"---{predict}")
+                    new_predict = "the ego vehicle is driving on the road"
+                    predict = new_predict
+                    pred_file[idx]["answer"] = new_predict
+                    bad_answer_count += 1
+                    
+                if predict == "":
+                    no_answer_count += 1
+                    new_predict = "the ego vehicle is driving on the road"
+                    pred_file[idx]["answer"] = new_predict
+                
                 if first_flag:
                     first_flag = False
                     answer_coords = re.findall(r'<.*?>', predict)
                     answer2_coords = re.findall(r'<.', predict)
                     if(len(answer_coords) != len(answer2_coords)):
+                        error_format_count += 1
                         # print(len(answer_coords) , len(answer2_coords))
                         last_coord = answer_coords[-1]
                         last_coord_pos = predict.find(last_coord)
@@ -124,14 +152,16 @@ def main():
                         pred_file[idx]["answer"] = new_predict
                         # print(predict)
                         # print(new_predict)
-                    break
+                    # break
                 
 
     
     new_pred_file = [pred_file[key] for key in pred_file.keys()]
     with open(new_root_path1, 'w') as f :
         json.dump(new_pred_file, f, indent=4)
-
+    print(f"bad_answer_count: {bad_answer_count}")
+    print(f"error_format_count: {error_format_count}")
+    print(f"no_answer_count: {no_answer_count}")
 if __name__ == '__main__':
     main()
     # tt()

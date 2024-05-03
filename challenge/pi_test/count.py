@@ -7,13 +7,17 @@ import json
 def hello():
     print("Hello, World!")
 
-with open("output.json", "r") as f:
+
+# count_path = "../test_llama.json"
+count_path = "./mini_trainning_llama.json"
+
+with open(count_path, "r") as f:
     data = json.load(f)
 
-print(f"Count of \"output.json\" :{len(data)}")
+print(f"Count of \"{count_path}\" :{len(data)}")
 
 
-with open("../test_llama.json", "r") as f:
-    data = json.load(f)
+# with open("../test_llama.json", "r") as f:
+#     data = json.load(f)
 
-print(f"Count of \"test_llama.json\" :{len(data)}")
+# print(f"Count of \"test_llama.json\" :{len(data)}")

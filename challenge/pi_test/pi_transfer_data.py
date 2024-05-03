@@ -37,9 +37,10 @@ import sys
 ]
 '''
 
-filepath = '../test_llama.json'
-output_filepath = './trainning_llama.json'
-output_filepath2 = '/home/ldl/pi_code/swift/pi_code/trainning_llama.json'
+filepath = '../test_val_llama.json'
+output_filepath = './val_llama.json'
+output_filepath2 = ''
+# output_filepath2 = '/home/ldl/pi_code/swift/pi_code/trainning_llama.json'
 # filepath = '../mini_test_llama.json'
 # output_filepath = './mini_trainning_llama.json'
 # output_filepath2 = '/home/ldl/pi_code/swift/pi_code/mini_trainning_llama.json'
@@ -90,8 +91,8 @@ for item in data:
 with open(output_filepath, 'w') as f:
     json.dump(output_data, f, indent=4)
 
-
-with open(output_filepath2, 'w') as f:
-    json.dump(output_data, f, indent=4)
+if output_filepath2:
+    with open(output_filepath2, 'w') as f:
+        json.dump(output_data, f, indent=4)
 
 print(f"Data transfered from {filepath} to {output_filepath} successfully!")

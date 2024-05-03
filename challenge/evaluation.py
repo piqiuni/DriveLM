@@ -36,8 +36,12 @@ class evaluation_suit():
     def eval_chatGPT(self, data):
         with Pool(32) as p:  # Change the number based on your CPU cores
             scores = p.map(self.chatgpt_eval.forward, data)
-
-        scores = list(map(float, scores))
+        try:
+            scores = list(map(float, scores))
+        except:
+            print(f"data:{data}")
+            print(scores)
+            raise 
         scores = sum(scores) / len(scores)
         return scores
 
@@ -167,6 +171,8 @@ if __name__ == '__main__':
                 GT = qa['A']
                 tag = qa['tag']
                 idx = scene_id + "_" + frame_id + "_" + str(i)
+                if idx not in pred_file.keys():
+                    break
                 predict = pred_file[idx]["answer"]
                 # assert pred_file[idx]["gt_answer"] == GT, print(pred_file[idx]["gt_answer"], GT)
                 if first_flag:
