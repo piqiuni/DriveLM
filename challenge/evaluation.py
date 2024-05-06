@@ -34,13 +34,26 @@ class evaluation_suit():
         return scores
 
     def eval_chatGPT(self, data):
+        def is_float(element):
+            try:
+                float(element)
+                return True
+            except ValueError:
+                return False
         with Pool(32) as p:  # Change the number based on your CPU cores
             scores = p.map(self.chatgpt_eval.forward, data)
         try:
             scores = list(map(float, scores))
         except:
-            print(f"data:{data}")
-            print(scores)
+            # print(f"data:{data}")
+            # print(scores)
+            pair = list(zip(data, scores))
+            for p in pair:
+                score = p[1]
+                if not is_float(score):
+                    print(f"score: {score}")
+                    print(f"pair: {p}")
+                    print("------")
             raise 
         scores = sum(scores) / len(scores)
         return scores

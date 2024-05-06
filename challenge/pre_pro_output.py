@@ -84,7 +84,8 @@ def debug_match(answer):
 
 
 def main():
-    root_path1 = "./pi_test/submit/output_0430_1033.json"
+    root_path1 = "./pi_test/submit/output_qwen-vl-chat_0505_1043.json"
+    
     new_name = "refine_" + root_path1.split("/")[-1]
     print(root_path1.split("/")[:-1])
     new_root_path1 = os.path.join(*root_path1.split("/")[:-1], new_name)
@@ -129,15 +130,21 @@ def main():
                 # print(question)
                 if question == "What's your comment on this scene?":
                     # print(f"---{predict}")
-                    new_predict = "the ego vehicle is driving on the road"
-                    predict = new_predict
-                    pred_file[idx]["answer"] = new_predict
-                    bad_answer_count += 1
+                    if predict == "":
+                        predict = "the ego vehicle is driving on the road"
+                        pred_file[idx]["answer"] = predict
+                        bad_answer_count += 1
+                    # elif len(predict) > 
                     
                 if predict == "":
                     no_answer_count += 1
-                    new_predict = "the ego vehicle is driving on the road"
-                    pred_file[idx]["answer"] = new_predict
+                    predict = "the ego vehicle is driving on the road"
+                    pred_file[idx]["answer"] = predict
+                    
+                # if question == "":
+                #     print(f"question == ''")
+                #     predict = ""
+                #     pred_file[idx]["answer"] = predict
                 
                 if first_flag:
                     first_flag = False
@@ -148,8 +155,8 @@ def main():
                         # print(len(answer_coords) , len(answer2_coords))
                         last_coord = answer_coords[-1]
                         last_coord_pos = predict.find(last_coord)
-                        new_predict = predict[:last_coord_pos + len(last_coord)]
-                        pred_file[idx]["answer"] = new_predict
+                        predict = predict[:last_coord_pos + len(last_coord)]
+                        pred_file[idx]["answer"] = predict
                         # print(predict)
                         # print(new_predict)
                     # break
@@ -162,6 +169,8 @@ def main():
     print(f"bad_answer_count: {bad_answer_count}")
     print(f"error_format_count: {error_format_count}")
     print(f"no_answer_count: {no_answer_count}")
+    print(f"new_path: {new_root_path1}")
+    
 if __name__ == '__main__':
     main()
     # tt()
