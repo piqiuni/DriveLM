@@ -10,7 +10,8 @@ country = "China"  # <str> -- country or region
 
 
 def main():
-    with open('./pi_test/submit/res_gen.json', 'r') as file:
+    input_file = "./pi_test/submit/res_gen.json"
+    with open(input_file, 'r') as file:
         output_res = json.load(file)
 
     submission_content = {
@@ -25,7 +26,11 @@ def main():
 
     with open('submission.json', 'w') as file:
         json.dump(submission_content, file, indent=4)   
-    print(f"Submission file has been saved to submission.json")
+        
+    hf_path = "/home/ldl/pi_code/LLaMA-BaseLine/submission.json"
+    with open(hf_path, 'w') as file:
+        json.dump(submission_content, file, indent=4)   
+    print(f"Submission file from '{input_file}' has been saved to 'submission.json' and '{hf_path}'")
 
 if __name__ == "__main__":
     main()

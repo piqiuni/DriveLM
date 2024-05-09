@@ -34,8 +34,24 @@ def convert2llama(root, dst):
                     ans = 'None'
                 
                 if question == "What's your comment on this scene?":
-                    ans = "the ego vehicle is driving on the road, there are no important objects in the current scene, there is no safety issue, the ego vehicle should keep going at the same speed based on the traffic rules."
-                                    
+                    ques = []
+                    ques.append("Please describe the current scene.")
+                    ques.append("What are the important objects in the current scene, determine their status, and predict their future status.")
+                    ques.append("What object should the ego vehicle notice?")
+                    ques.append("What is the priority of the objects that the ego vehicle should consider?")
+                    ques.append("Are there any safety issues in the current scene?")
+                    ques.append("What are the safe actions to take for the ego vehicle?")
+                    ques.append("What are the dangerous actions to take for the ego vehicle?")
+                    ques.append("Predict the behavior of the ego vehicle.")
+                    n_q = "".join(ques)
+                    
+                    
+                    ans = "the ego vehicle is driving on the road. There are no important objects in the current scene, the prediction of them are none. The ego vehicle should notice the front objects in ego lane. There is no safety issue, the safe action to take for the ego vehicle is to keep going at the same speed, the dangerous action to take for the ego vehicle is to stop. The ego vehicle should keep going at the same speed based on the traffic rules, which has a high probability."    
+                    
+                    # ans = "the ego vehicle is driving on the road. There are no important objects in the current scene, the prediction of them are none. The ego vehicle should notice the front objects in ego lane. \
+                    # Nothing will affect driving judgment. \
+                    # There is no safety issue and the probability is high, the safe action to take for the ego vehicle is to keep going at the same speed, the dangerous action to take for the ego vehicle is to stop. The ego vehicle should keep going at the same speed based on the traffic rules, which has a high probability."    
+                    
                 output.append(
                     {
                         "id": scene_id + "_" + frame_id + "_" + str(idx),
