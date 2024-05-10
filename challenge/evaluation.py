@@ -114,6 +114,8 @@ class evaluation_suit():
         # print(GT)
         # print(GT_nums)
         # raise
+        if len(answer_nums)%2==1:
+            print(f"answer:{answer}")
         answer_nums = np.array([list(map(float, x.split()))[0] for x in answer_nums]).reshape(-1, 2)
         # print(answer_nums)
         GT_nums = np.array([list(map(float, x.split()))[0] for x in GT_nums]).reshape(-1, 2)

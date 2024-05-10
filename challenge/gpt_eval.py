@@ -8,6 +8,8 @@ import argparse
 from multiprocessing import Pool
 
 
+use_gpt = False
+
 pi_api_key = "sk-vWxlv5wyV1rlGdDfWsOwKE9BSaG1bkmteuWItXsqqHKLAOL6"
 pi_base_url = "https://api.chatanywhere.tech"
 
@@ -39,6 +41,8 @@ class GPTEvaluation:
         return messages
     
     def forward(self, data):
+        if not use_gpt:
+            return 0
         answer, GT = data
         prompts = "Rate my answer based on the correct answer out of 100, with higher scores indicating that the answer is closer to the correct answer, and you should be accurate to single digits like 62, 78, 41,etc. Output the number only! Output the number only! If the answer does not correspond to the correct answer provided, give a 0"
         prompts = prompts + "This is the correct answer: " + GT + "This is my answer: " + answer
