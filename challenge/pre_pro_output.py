@@ -5,10 +5,10 @@ import numpy as np
 import re
 import os
 
-from evaluation import evaluation_suit
+# from evaluation import evaluation_suit
 from collections import Counter
 
-import language_evaluation
+# import language_evaluation
 
 
 # right structure
@@ -105,16 +105,20 @@ def debug_match(answer):
 
 
 def main():
-    root_path1 = "./pi_test/submit/output_internlm-xcomposer2-7b-chat_0509_1455.json"
+    root_path1 = "./pi_test/submit/output_qwen-vl-chat_0513_1619.json"
+    root_path1 = "./pi_test/submit/output_qwen-vl-chat_0515_1343.json"
+    root_path2 = "v1_1_val_nus_q_only.json"
+    
+    # root_path1 = "../../swift/pi_code/output/mini_output_internlm-xcomposer2-7b-chat_0511_1718.json"
+    # root_path2 = "mini_test_eval.json"
     
     new_name = "refine_" + root_path1.split("/")[-1]
     print(root_path1.split("/")[:-1])
     new_root_path1 = os.path.join(*root_path1.split("/")[:-1], new_name)
     
-    root_path2 = "v1_1_val_nus_q_only.json"
     
     
-    language_eval = language_evaluation.CocoEvaluator(coco_types=["BLEU", "ROUGE_L", "CIDEr"])
+    # language_eval = language_evaluation.CocoEvaluator(coco_types=["BLEU", "ROUGE_L", "CIDEr"])
     # root_path1 = "mini_output.json"
     # new_root_path1 = "refine_mini_output.json"
     # root_path2 = "mini_test_eval.json"
@@ -132,8 +136,10 @@ def main():
     with open(root_path2, 'r') as f:
         test_file = json.load(f)
 
-    evaluation = evaluation_suit()
-    error_format_count = 0
+    # evaluation = evaluation_suit()
+    
+    error_typing_format_count = 0
+    error_coord_format_count = 0
     bad_answer_count = 0
     no_answer_count = 0
     ch_answer_count = 0
@@ -150,8 +156,24 @@ def main():
                 GT = qa['A']
                 tag = qa['tag']
                 idx = scene_id + "_" + frame_id + "_" + str(i)
+                # pred_file[idx]["answer"] = pred_file[idx]["answer"].strip()
                 predict = pred_file[idx]["answer"]
                 # print(question)
+                
+                if 1 and 0 in tag:
+                    error_typing_format_count += 1
+                    if 'yes' in predict.lower():
+                        predict = "Yes."
+                        pred_file[idx]["answer"] = predict
+                    elif 'no' in predict.lower():
+                        predict = "No."
+                        pred_file[idx]["answer"] = predict
+                    elif len(predict) > 1:
+                        predict = predict[0]
+                        pred_file[idx]["answer"] = predict
+                    else:
+                        error_typing_format_count -= 1
+                
                 if question == "What's your comment on this scene?":
                     # print(f"---{predict}")
                     if predict == "":
@@ -167,12 +189,16 @@ def main():
                 #     pred_file[idx]["answer"] = predict
                 
                 if 1:
+                    if 'qwen' in root_path1:
+                        d_pos = 1
+                    else:
+                        d_pos = 8
                     pattern = r'[\u4e00-\uffff]+'
                     chinese_chars = re.findall(pattern, predict)
                     if chinese_chars:
                         ch_answer_count += 1
                         pos = predict.find(chinese_chars[0])
-                        pos = max(0, pos - 8)
+                        pos = max(0, pos - d_pos)
                         predict = predict[:pos]
                         # print(predict)
                         # print(set(chinese_chars))
@@ -180,11 +206,17 @@ def main():
                             predict = "None"
                         pred_file[idx]["answer"] = predict
                 
-                if 1:
+                if 0:
+                    words = predict.split('.')
+                    sentence = words[-2:]
+                    # print(sentence)
                     m_w, m_c = find_most_frequent_word(predict)
                     if m_c > 10:
+                        print(m_w, m_c)
+                        print(predict, end = '---')
                         pos = find_nth_occurrence(predict, m_w, 3)
                         predict = predict[:pos]
+                        print(predict)
                         pred_file[idx]["answer"] = predict
                         repeat_count += 1
                 
@@ -192,13 +224,28 @@ def main():
                     answer_coords = re.findall(r'<.*?>', predict)
                     answer2_coords = re.findall(r'<.', predict)
                     if(len(answer_coords) != len(answer2_coords)):
-                        error_format_count += 1
+                        error_coord_format_count += 1
                         # print(len(answer_coords) , len(answer2_coords))
-                        last_coord = answer_coords[-1]
-                        last_coord_pos = predict.find(last_coord)
-                        predict = predict[:last_coord_pos + len(last_coord)]
-                        pred_file[idx]["answer"] = predict
-                        print(f"ef_id:{idx}; ",end='')
+                        if 1:
+                            # print(predict)
+                            j_splits = predict.split(". ")
+                            # print(j_splits)
+                            j_last_len = len(". ".join(j_splits[:-1]))
+                            d_splits = predict.split(", ")
+                            d_last_len = len(". ".join(d_splits[:-1]))
+                            # print(j_last_len, d_last_len)
+                            # print(j_splits[-1], "\n", d_splits[-1])
+                            # print(splits[-3:]) 
+                            # print()
+                            predict = predict[:max(d_last_len, j_last_len)]
+                            pred_file[idx]["answer"] = predict
+                        
+                        else:
+                            last_coord = answer_coords[-1]
+                            last_coord_pos = predict.find(last_coord)
+                            predict = predict[:last_coord_pos + len(last_coord)]
+                            pred_file[idx]["answer"] = predict
+                        # print(f"ef_id:{idx}; ",end='')
                         # print(predict)
                         # print(new_predict)
                     # break
@@ -208,16 +255,18 @@ def main():
                     print(f"no answer: {idx}, question:{question}")
                     # predict = "the ego vehicle is driving on the road"
                     # pred_file[idx]["answer"] = predict
-                    
-                results_gen = language_eval.run_evaluation(predict, GT)
-                
-
+                # predict = ["hello", "hi"]
+                # GT = ["",""]
+                # results_gen = language_eval.run_evaluation(predict, GT)
+                # print(f"results_gen:{results_gen}")
+                # raise
     
     new_pred_file = [pred_file[key] for key in pred_file.keys()]
     with open(new_root_path1, 'w') as f :
         json.dump(new_pred_file, f, indent=4)
     print(f"bad_answer_count: {bad_answer_count}")
-    print(f"error_format_count: {error_format_count}")
+    print(f"error_typing_format_count: {error_typing_format_count}")
+    print(f"error_coord_format_count: {error_coord_format_count}")
     print(f"no_answer_count: {no_answer_count}")
     print(f"ch_answer_count: {ch_answer_count}")
     print(f"repeat_count: {repeat_count}")

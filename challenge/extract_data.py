@@ -16,8 +16,8 @@ def extract_data(root_path, save_path):
         
         # for test file
         test_data[scene_id] = dict()
+        test_data[scene_id]['scene_description'] = train_file[scene_id]['scene_description']
         test_data[scene_id]['key_frames'] = dict()
-
         for frame_id in scene_data.keys():
             frame_data_infos = scene_data[frame_id]['key_object_infos']
             frame_data_qa = scene_data[frame_id]['QA']

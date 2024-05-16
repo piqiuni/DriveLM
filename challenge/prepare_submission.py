@@ -10,7 +10,7 @@ country = "China"  # <str> -- country or region
 
 
 def main():
-    input_file = "./pi_test/submit/res_gen.json"
+    input_file = "./pi_test/submit/refine_output_qwen-vl-chat_0515_1343.json"
     with open(input_file, 'r') as file:
         output_res = json.load(file)
 
