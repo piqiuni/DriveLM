@@ -105,8 +105,7 @@ def debug_match(answer):
 
 
 def main():
-    root_path1 = "./pi_test/submit/output_qwen-vl-chat_0513_1619.json"
-    root_path1 = "./pi_test/submit/output_qwen-vl-chat_0515_1343.json"
+    root_path1 = "./pi_test/submit/output_internlm-xcomposer2-7b-chat_0523_2344.json"
     root_path2 = "v1_1_val_nus_q_only.json"
     
     # root_path1 = "../../swift/pi_code/output/mini_output_internlm-xcomposer2-7b-chat_0511_1718.json"
@@ -156,23 +155,56 @@ def main():
                 GT = qa['A']
                 tag = qa['tag']
                 idx = scene_id + "_" + frame_id + "_" + str(i)
-                # pred_file[idx]["answer"] = pred_file[idx]["answer"].strip()
+                pred_file[idx]["answer"] = pred_file[idx]["answer"].strip()
                 predict = pred_file[idx]["answer"]
                 # print(question)
                 
                 if 1 and 0 in tag:
                     error_typing_format_count += 1
                     if 'yes' in predict.lower():
+                        pass
                         predict = "Yes."
                         pred_file[idx]["answer"] = predict
                     elif 'no' in predict.lower():
+                        pass
                         predict = "No."
                         pred_file[idx]["answer"] = predict
                     elif len(predict) > 1:
+                        selects = ['A', 'B', 'C', 'D', 'E']
+                        in_flag = False
+                        for sel in selects:
+                            if sel in predict:
+                                # print(predict)
+                                predict = sel
+                                pred_file[idx]["answer"] = predict
+                                in_flag = True
+                                # print(predict)
+                                break
+                                # raise
+                        if not in_flag:
+                            # FIXME
+                            print(f"-question:{question}")
+                            print(f"--error predict:{predict}")
+                            predict = 'A'
+                            pred_file[idx]["answer"] = predict
+                            # error_typing_format_count += 1
+                            # raise
+                            if 1:
+                                ans = input("input answer:")
+                                if ans not in selects:
+                                    print(f"wrong answer:{ans}")
+                                    raise
+                                predict = ans
+                                pred_file[idx]["answer"] = predict
+                                
+                            
+                            
+                            
                         predict = predict[0]
                         pred_file[idx]["answer"] = predict
                     else:
                         error_typing_format_count -= 1
+                        pass
                 
                 if question == "What's your comment on this scene?":
                     # print(f"---{predict}")
