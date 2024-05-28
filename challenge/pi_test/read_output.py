@@ -28,7 +28,10 @@ class ReadOutput(object):
         """
         with open(filepath, 'r') as f:
             data = json.load(f)
-        data_dict = {data["id"]: data for data in data}
+        try:
+            data_dict = {data["id"]: data for data in data}
+        except:
+            data_dict = data
         return data_dict
 
     def draw_box(self, image, box_pos, box_size, color):
@@ -104,8 +107,8 @@ class ReadOutput(object):
         for image_path in image_paths:
             abs_image_path = os.path.join(self.abs_data_path, image_path)
             image = cv2.imread(abs_image_path)
-            cv2.imwrite(os.path.join('./pi_test', 'test.png'), image)
-            raise
+            # cv2.imwrite(os.path.join('./pi_test', 'test.png'), image)
+            # raise
             image_camera = image_path.split('/')[3]
             (text_width, text_height), baseline = cv2.getTextSize(image_camera, self.font, self.font_scale, self.font_thickness)
             img_height, img_width = image.shape[:2]
@@ -143,10 +146,12 @@ class ReadOutput(object):
         
     
     def process(self, testdata_path, output_path):
-        data1_dict = self.read_json("pi_test/pi_test_llama.json")
-        data2_dict = self.read_json("pi_test/pi_output.json")
+        data1_dict = self.read_json(testdata_path)
+        data2_dict = self.read_json(output_path)
         if len(data1_dict) != len(data2_dict):
             print("Data length mismatch!")
+            print("Data1 length:", len(data1_dict))
+            print("Data2 length:", len(data2_dict))
         common_keys = data1_dict.keys() & data2_dict.keys()
         for key in tqdm(common_keys):
             cimage_name = 'Output_' + str(key) + '.png'
@@ -161,10 +166,13 @@ def main():
     """
     Main function to read data, process and display images.
     """
-    testdata_path = "pi_test/pi_test_llama.json"
-    output_path = "pi_test/pi_output.json"
+    # testdata_path = "pi_test/pi_test_llama.json"
+    testdata_path = "/home/ldl/pi_code/DriveLM/challenge/pi_test/demo_data/demo_test_llama.json"
+    # output_path = "pi_test/pi_output.json"
+    output_path = "/home/ldl/pi_code/swift/pi_code/output/demo_output_qwen-vl-chat_0527_1801.json"
+    
     abs_data_path = "/home/ldl/pi_code/DriveLM/challenge/llama_adapter_v2_multimodal7b"
-    save_path = "./pi_test/outputImages"
+    save_path = "./pi_test/outputImages/chat_demo"
     
     reader = ReadOutput(abs_data_path, save_path)
     reader.process(testdata_path, output_path)

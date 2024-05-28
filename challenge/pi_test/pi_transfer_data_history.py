@@ -237,14 +237,18 @@ class data_transfer_history(object):
             scene_id = keys[index]
             # print(scene_id)
             scene_data = self.test_file[scene_id]['key_frames']
-            description = self.test_file[scene_id]['scene_description']
+            description_flag = False
+            if "scene_description" in self.test_file[scene_id]:
+                description_flag = True
+                description = self.test_file[scene_id]['scene_description']
             qa_lens = []
             for frame_id in scene_data.keys():
                 image_paths = scene_data[frame_id]['image_paths']
                 self.new_frame(scene_id, frame_id, image_paths)
                 frame_data_qa = scene_data[frame_id]['QA']
                 # self.add_qa_pair(self.des_question, description, [])
-                frame_data_qa["perception"].insert(0, {'Q':self.des_question, 'A':description})
+                if description_flag:
+                    frame_data_qa["perception"].insert(0, {'Q':self.des_question, 'A':description})
                 self.task_qa_lens = [len(frame_data_qa[task]) for task in self.task_keys]
                 self.total_qas = frame_data_qa["perception"] + frame_data_qa["prediction"] + frame_data_qa["planning"] + frame_data_qa["behavior"]
                 for i, task in enumerate(self.task_keys):
@@ -282,6 +286,12 @@ if __name__ == "__main__":
     output_filepath = './temp_history_trainning_data.json'
     output_filepath2 = '/home/ldl/pi_code/swift/pi_code/history_trainning_llama.json'
     his_len = 20
+    output_filepaths = [output_filepath, output_filepath2]
+    
+    # filepath = './demo_data/demo_test_eval.json'
+    # output_filepath = './demo_data/demo_history_data.json'
+    # his_len = 20
+    # output_filepaths = [output_filepath]
     
     trans = data_transfer_history(filepath, [output_filepath, output_filepath2], his_len)
     trans.start()

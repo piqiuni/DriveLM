@@ -39,6 +39,11 @@ import sys
 
 filepath = '../test_val_llama.json'
 output_filepath = './val_llama.json'
+
+filepath = '/home/ldl/pi_code/DriveLM/challenge/pi_test/demo_data/demo_test_llama.json'
+output_filepath = './demo_data/demo_history_data.json'
+
+
 output_filepath2 = ''
 # output_filepath2 = '/home/ldl/pi_code/swift/pi_code/trainning_llama.json'
 # filepath = '../mini_test_llama.json'

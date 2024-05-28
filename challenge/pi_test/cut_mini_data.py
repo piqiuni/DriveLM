@@ -3,13 +3,15 @@ import os
 import sys
 
 scene_numbers = 80
-frame_numbers = 2
+frame_numbers = 1
 # filepath = '../test_llama.json'
 # mini_filepath = '../mini_test_llama.json'
 
-# filepath = './test_eval.json'
-# mini_filepath = './mini_test_eval.json'
+filepath = './test_eval.json'
+mini_filepath = './pi_test/demo_data/demo_test_eval.json'
 
+# filepath = './test_llama.json'
+# mini_filepath = './mini_test_eval.json'
 
 with open(filepath, 'r') as f:
     data = json.load(f)
@@ -42,14 +44,14 @@ sys.path.append(parent_dir)
 # print(current_dir)
 # print(parent_dir)
 
-from convert2llama import convert2llama
+# from convert2llama import convert2llama
 
-root = "mini_test_eval.json"
-dst = "mini_test_llama.json"
-convert2llama(root, dst)
-print(f"Generated {dst} from {root}, ", end='')
+# root = "mini_test_eval.json"
+# dst = "mini_test_llama.json"
+# convert2llama(root, dst)
+# print(f"Generated {dst} from {root}, ", end='')
 
 
-with open(dst, 'r') as f:
-    data = json.load(f)
-    print(f"len: {len(data)}")
+# with open(dst, 'r') as f:
+#     data = json.load(f)
+#     print(f"len: {len(data)}")
